@@ -9,7 +9,6 @@
   },
   "main": "minimatch.js",
   "scripts": {
-    "posttest": "standard minimatch.js test/*.js",
     "test": "tap test/*.js"
   },
   "engines": {

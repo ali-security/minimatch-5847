@@ -66,13 +66,13 @@ tap.test('global leak test', function (t) {
   t.end()
 })
 
-tap.test('invalid patterns', t => {
-  var toolong = 'x'.repeat(64 * 1024) + 'y'
+tap.test('invalid patterns', function (t) {
+  var toolong = Array(64 * 1024 + 1).join('x') + 'y'
   var expectTooLong = { message: 'pattern is too long' }
-  t.throws(() => mm.braceExpand(toolong), expectTooLong)
-  t.throws(() => new mm.Minimatch(toolong), expectTooLong)
-  t.throws(() => mm('xy', toolong), expectTooLong)
-  t.throws(() => mm.match(['xy'], toolong), expectTooLong)
+  t.throws(function () { mm.braceExpand(toolong) }, expectTooLong)
+  t.throws(function () { new mm.Minimatch(toolong) }, expectTooLong)
+  t.throws(function () { mm('xy', toolong) }, expectTooLong)
+  t.throws(function () { mm.match(['xy'], toolong) }, expectTooLong)
 
   var invalid = { message: 'invalid pattern' }
   var invalids = [
@@ -85,24 +85,25 @@ tap.test('invalid patterns', t => {
     true,
     false,
   ]
-  for (var i of invalids) {
-    t.throws(() => mm.braceExpand(i), invalid)
-    t.throws(() => new mm.Minimatch(i), invalid)
-    t.throws(() => mm('xy', i), invalid)
-    t.throws(() => mm.match(['xy'], i), invalid)
+  for (var j = 0; j < invalids.length; j++) {
+    var i = invalids[j]
+    t.throws(function () { mm.braceExpand(i) }, invalid)
+    t.throws(function () { new mm.Minimatch(i) }, invalid)
+    t.throws(function () { mm('xy', i) }, invalid)
+    t.throws(function () { mm.match(['xy'], i) }, invalid)
   }
 
   t.end()
 })
 
-tap.test('ctor is generator', t => {
+tap.test('ctor is generator', function (t) {
   var m = mm.Minimatch('asdf')
   t.type(m, mm.Minimatch)
   t.equal(m.pattern, 'asdf')
   t.end()
 })
 
-tap.test('nocomment matches nothing', t => {
+tap.test('nocomment matches nothing', function (t) {
   t.equal(mm('#comment', '#comment', { nocomment: false }), false)
   t.equal(mm('#comment', '#comment', { nocomment: true }), true)
   t.end()

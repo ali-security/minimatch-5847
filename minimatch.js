@@ -1,7 +1,7 @@
 module.exports = minimatch
 minimatch.Minimatch = Minimatch
 
-var path = (() => { try { return require('path') } catch (e) {}})() || {
+var path = (function() { try { return require('path') } catch (e) {}})() || {
   sep: '/'
 }
 minimatch.sep = path.sep
@@ -82,7 +82,7 @@ minimatch.defaults = function (def) {
   m.Minimatch = function Minimatch (pattern, options) {
     return new orig.Minimatch(pattern, ext(def, options))
   }
-  m.Minimatch.defaults = options => {
+  m.Minimatch.defaults = function(options) {
     return orig.defaults(ext(def, options)).Minimatch
   }
 
@@ -273,7 +273,7 @@ function braceExpand (pattern, options) {
 }
 
 var MAX_PATTERN_LENGTH = 1024 * 64
-var assertValidPattern = pattern => {
+var assertValidPattern = function(pattern) {
   if (typeof pattern !== 'string') {
     throw new TypeError('invalid pattern')
   }

@@ -56,8 +56,10 @@ tap.test('global leak test', function (t) {
   t.end()
 })
 
-tap.test('empty defaults obj returns original ctor', t => {
-  for (var empty of [{}, undefined, null, false, 1234, 'xyz']) {
+tap.test('empty defaults obj returns original ctor', function (t) {
+  var empties = [{}, undefined, null, false, 1234, 'xyz']
+  for (var i = 0; i < empties.length; i++) {
+    var empty = empties[i]
     var defmm = mm.defaults({})
     t.equal(defmm, mm)
     var Class = mm.Minimatch.defaults({})
@@ -66,7 +68,7 @@ tap.test('empty defaults obj returns original ctor', t => {
   t.end()
 })
 
-tap.test('call defaults mm function', t => {
+tap.test('call defaults mm function', function (t) {
   var defmm = mm.defaults({ nocomment: true })
   t.equal(mm('# nocomment', '# nocomment'), false)
   t.equal(defmm('# nocomment', '# nocomment'), true)
